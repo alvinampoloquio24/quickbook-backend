@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Tymon\JWTAuth\Facades\JWTAuth;
@@ -16,6 +17,7 @@ class AuthController extends Controller
     {
         $this->middleware('auth:api', ['except' => ['login', "register"]]);
     }
+
 
     public function register(Request $request)
     {
@@ -49,6 +51,7 @@ class AuthController extends Controller
         ], 201);
     }
 
+
     public function login()
     {
         $credentials = request(['email', 'password']);
@@ -63,6 +66,45 @@ class AuthController extends Controller
     public function me()
     {
         return response()->json(auth()->user());
+    }
+
+
+
+    public function updateSelf(Request $request)
+    {
+        $user = auth()->user();
+
+        $validator = Validator::make($request->all(), [
+            'first_name' => 'sometimes|string|max:255',
+            'last_name'  => 'sometimes|string|max:255',
+            'email'      => 'sometimes|email|unique:users,email,' . $user->id,
+            'password'   => 'sometimes|string|min:6',
+            'phone'      => 'sometimes|string|max:20',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'errors' => $validator->errors()
+            ], 422);
+        }
+
+        if ($request->filled('password')) {
+            $user->password = Hash::make($request->password);
+        }
+
+        if ($request->filled('first_name')) $user->first_name = $request->first_name;
+        if ($request->filled('last_name'))  $user->last_name  = $request->last_name;
+        if ($request->filled('email'))      $user->email      = $request->email;
+        if ($request->filled('phone'))      $user->phone      = $request->phone;
+
+        /** @var \App\Models\User $user */
+        $user = auth()->user();
+        $user->save();
+
+        return response()->json([
+            'message' => 'Profile updated successfully',
+            'user' => $user
+        ], 200);
     }
 
     public function logout()

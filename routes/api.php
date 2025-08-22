@@ -27,6 +27,7 @@ Route::group([
 
 ], function ($router) {
     Route::get('me', [AuthController::class, 'me']);
+    Route::put('updateSelf', [AuthController::class, 'updateSelf']);
     // Route::post('refresh', 'AuthController@refresh');
     Route::post('me',  [AuthController::class, 'me']);
 });
