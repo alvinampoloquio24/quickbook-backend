@@ -36,11 +36,11 @@ Route::group([
 // Listings routes
 // Public: Read-only (all users)
 Route::get('listings', [ListingController::class, 'index']);
-Route::get('listings/{listing}', [ListingController::class, 'show']);
+Route::get('getListing/{listing}', [ListingController::class, 'getListing']);
 
 // Protected: Create, Update, Delete (authenticated users only)
 Route::group(['middleware' => 'auth:api'], function () {
     Route::post('addListing', [ListingController::class, 'addListing']);
-    Route::put('listings/{listing}', [ListingController::class, 'update']);
+    Route::put('updateListing/{listing}', [ListingController::class, 'updateListing']);
     Route::delete('listings/{listing}', [ListingController::class, 'destroy']);
 });
