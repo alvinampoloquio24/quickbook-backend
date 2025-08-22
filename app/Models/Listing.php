@@ -34,10 +34,12 @@ class Listing extends Model
     ];
 
     /**
-     * Get all bookings associated with this listing.
+     * Get all bookings associated with this listing.\
+     * 
+     * 
+     *     public function bookings()
+     *   {
+     *     return $this->hasMany(Booking::class);
+     * }
      */
-    public function bookings()
-    {
-        return $this->hasMany(Booking::class);
-    }
 }

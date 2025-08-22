@@ -3,6 +3,7 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\ListingController;
 
 /*
 |--------------------------------------------------------------------------
@@ -30,4 +31,16 @@ Route::group([
     Route::put('updateSelf', [AuthController::class, 'updateSelf']);
     // Route::post('refresh', 'AuthController@refresh');
     Route::post('me',  [AuthController::class, 'me']);
+});
+
+// Listings routes
+// Public: Read-only (all users)
+Route::get('listings', [ListingController::class, 'index']);
+Route::get('listings/{listing}', [ListingController::class, 'show']);
+
+// Protected: Create, Update, Delete (authenticated users only)
+Route::group(['middleware' => 'auth:api'], function () {
+    Route::post('addListing', [ListingController::class, 'addListing']);
+    Route::put('listings/{listing}', [ListingController::class, 'update']);
+    Route::delete('listings/{listing}', [ListingController::class, 'destroy']);
 });
