@@ -115,4 +115,27 @@ class ListingController extends Controller
             ], 500);
         }
     }
+    public function deleteListing($id)
+    {
+        try {
+            // Manually find the listing
+            $listing = Listing::findOrFail($id);
+
+            // Delete the listing
+            $listing->delete();
+
+            return response()->json([
+                'message' => 'Listing deleted successfully'
+            ], 200);
+        } catch (ModelNotFoundException $e) {
+            return response()->json([
+                'message' => 'Listing not found.'
+            ], 404);
+        } catch (\Exception $e) {
+            return response()->json([
+                'message' => 'Something went wrong while deleting the listing.',
+                'error'   => $e->getMessage()
+            ], 500);
+        }
+    }
 }

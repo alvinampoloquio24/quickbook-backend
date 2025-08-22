@@ -42,5 +42,5 @@ Route::get('getListing/{listing}', [ListingController::class, 'getListing']);
 Route::group(['middleware' => 'auth:api'], function () {
     Route::post('addListing', [ListingController::class, 'addListing']);
     Route::put('updateListing/{listing}', [ListingController::class, 'updateListing']);
-    Route::delete('listings/{listing}', [ListingController::class, 'destroy']);
+    Route::delete('deleteListing/{listing}', [ListingController::class, 'deleteListing']);
 });
